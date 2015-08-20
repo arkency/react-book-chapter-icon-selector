@@ -1,3 +1,5 @@
+import React, { PropTypes } from 'react'
+import { Button } from 'react-bootstrap';
 import Icon from 'react-fa'
 
 class Star extends React.Component {
@@ -34,9 +36,9 @@ class Star extends React.Component {
 
   render () {
     return (
-      <a onClick={this.labelClicked}>
+      <Button bsSize="large" bsStyle='link' onClick={this.labelClicked}>
         <Icon name={this.state.label} />
-      </a>
+      </Button>
     )
   }
 }
