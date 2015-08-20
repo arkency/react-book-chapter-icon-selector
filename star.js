@@ -10,10 +10,18 @@ class Star extends React.Component {
     this.labelClicked2SecondsAgo = this.labelClicked2SecondsAgo.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.label != this.state.label) {
+      clearTimeout(this.state.lastClickedTimeoutId);
+      this.setState({label: newProps.label, lastClickedTimeoutId: null});
+    }
+  }
+
   labelClicked() {
     const currentLabel  = this.state.label;
     const currentLabelIndex = this.props.labels.indexOf(this.state.label);
     let nextLabelIndex;
+
     if (currentLabelIndex != 0 && !this.state.lastClickedTimeoutId) {
       nextLabelIndex = 0;
     } else {
@@ -56,6 +64,9 @@ Star.defaultProps = {
     'soccer-ball-o'
   ],
   label: 'star-o',
+  onChange: function(label) {
+    console.log(label);
+  }
 }
 
 export default Star
