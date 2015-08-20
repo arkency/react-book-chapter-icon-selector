@@ -27,6 +27,9 @@ class Star extends React.Component {
 
   labelClicked2SecondsAgo() {
     this.setState({lastClickedTimeoutId: null});
+    if (this.props.onChange) {
+      this.props.onChange(this.state.label);
+    }
   }
 
   render () {
