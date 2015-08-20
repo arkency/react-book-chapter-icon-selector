@@ -7,17 +7,34 @@ class Star extends React.Component {
     this.labelClicked = this.labelClicked.bind(this);
   }
 
-  labelClicked(){
-    this.setState({ label: 'star' });
+  labelClicked() {
+    const currentLabelIndex = this.props.labels.indexOf(this.state.label);
+    const nextLabelIndex = (currentLabelIndex+1) % this.props.labels.length;
+    const nextLabel = this.props.labels[nextLabelIndex];
+    this.setState({ label: nextLabel });
   }
 
   render () {
     return (
-      <a onClick={this.labelClicked} >
+      <a onClick={this.labelClicked}>
         <Icon name={this.state.label} />
       </a>
     )
   }
+}
+
+Star.defaultProps = {
+  labels: [
+    'star-o', 
+    'star', 
+    'star-half-empty', 
+    'exclamation-circle', 
+    'check', 
+    'question-circle', 
+    'exclamation-triangle',
+    'plane',
+    'soccer-ball-o'
+  ]
 }
 
 export default Star
