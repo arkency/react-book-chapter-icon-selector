@@ -5,7 +5,7 @@ import Icon from 'react-fa'
 class Star extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { label: 'star-o', lastClickedTimeoutId: null };
+    this.state = { label: this.props.label, lastClickedTimeoutId: null };
     this.labelClicked = this.labelClicked.bind(this);
     this.labelClicked2SecondsAgo = this.labelClicked2SecondsAgo.bind(this);
   }
@@ -54,7 +54,8 @@ Star.defaultProps = {
     'exclamation-triangle',
     'plane',
     'soccer-ball-o'
-  ]
+  ],
+  label: 'star-o',
 }
 
 export default Star
