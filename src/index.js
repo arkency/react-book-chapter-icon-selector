@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
 
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Star from "./components/Star";
 
@@ -8,11 +8,8 @@ import { Grid, Row, Col, Button } from "react-bootstrap";
 import clone from "clone";
 import Icon from "react-fa";
 
-class Main extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      emails: [
+function Main(props) {
+  const [emails, updateEmails] = useState([
         {
           id: 0,
           subject: "Big names using React.js today",
@@ -50,64 +47,54 @@ class Main extends React.Component {
           label: "soccer-ball-o",
           lastUpdated: new Date()
         }
-      ]
-    };
-    this.onLabelChange = this.onLabelChange.bind(this);
-    this.onRandomLabelAssign = this.onRandomLabelAssign.bind(this);
+      ]);
+
+  function onLabelChange(id, newLabel) {
+    const newEmails = [...emails];
+    newEmails[id].label = newLabel;
+    newEmails[id].lastUpdated = new Date();
+    updateEmails(newEmails);
   }
 
-  onLabelChange(id, newLabel) {
-    let newState = clone(this.state);
-    newState.emails.filter(e => e.id === id).forEach(function(e) {
-      e.label = newLabel;
-      e.lastUpdated = new Date();
-    });
-    this.setState(newState);
-  }
-
-  onRandomLabelAssign(id, reactEvent) {
-    let newState = clone(this.state);
-    newState.emails.filter(e => e.id === id).forEach(function(e) {
-      e.label = ["check", "question-circle", "exclamation-triangle"][
+  function onRandomLabelAssign(id, reactEvent) {
+    const newEmails = [...emails];
+    newEmails[id].label = ["check", "question-circle", "exclamation-triangle"][
         Date.now() % 3
       ];
-      e.lastUpdated = new Date();
-    });
-    this.setState(newState);
+    newEmails[id].lastUpdated = new Date();
+    updateEmails(newEmails);
   }
 
-  render() {
-    return (
-      <Grid>
-        {this.state.emails.map(email =>
-          <Row key={"row-" + email.id}>
-            <Col md={1}>
-              <Star
-                label={email.label}
-                onChange={this.onLabelChange.bind(null, email.id)}
-              />
-            </Col>
-            <Col md={10}>
-              {email.subject}
+  return (
+    <Grid>
+      {emails.map(email =>
+        <Row key={`row-${email.id}`}>
+          <Col md={1}>
+            <Star
+              label={email.label}
+              onChange={onLabelChange.bind(null, email.id)}
+            />
+          </Col>
+          <Col md={10}>
+            {email.subject}
 
-              <div className="timestamp">
-                {email.lastUpdated.toISOString()}
-              </div>
-            </Col>
-            <Col md={1}>
-              <Button
-                bsSize="large"
-                bsStyle="link"
-                onClick={this.onRandomLabelAssign.bind(null, email.id)}
-              >
-                <Icon name="random" />
-              </Button>
-            </Col>
-          </Row>
-        )}
-      </Grid>
-    );
-  }
+            <div className="timestamp">
+              {email.lastUpdated.toISOString()}
+            </div>
+          </Col>
+          <Col md={1}>
+            <Button
+              bsSize="large"
+              bsStyle="link"
+              onClick={onRandomLabelAssign.bind(null, email.id)}
+            >
+              <Icon name="random" />
+            </Button>
+          </Col>
+        </Row>
+      )}
+    </Grid>
+  );
 }
 
 ReactDOM.render(<Main />, document.getElementById("root"));
