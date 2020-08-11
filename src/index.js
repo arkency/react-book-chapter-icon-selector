@@ -5,7 +5,6 @@ import ReactDOM from "react-dom";
 import Star from "./components/Star";
 
 import { Grid, Row, Col, Button } from "react-bootstrap";
-import clone from "clone";
 import Icon from "react-fa";
 
 function Main(props) {

@@ -1,54 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Icon from "react-fa";
 
-class Star extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { label: this.props.label, lastClickedTimeoutId: null };
-    this.labelClicked = this.labelClicked.bind(this);
-    this.labelClicked2SecondsAgo = this.labelClicked2SecondsAgo.bind(this);
-  }
+function Star(props) {
+  const [label, updateLabel] = useState(props.label);
+  const [lastClickedTimeoutId, updateLastClickedTimeoutId] = useState(null);
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.label != this.state.label) {
-      clearTimeout(this.state.lastClickedTimeoutId);
-      this.setState({ label: newProps.label, lastClickedTimeoutId: null });
-    }
-  }
+  useEffect(() => {
+    if (props.label !== label) {
+      clearTimeout(lastClickedTimeoutId);
+      updateLabel(props.label);
+      updateLastClickedTimeoutId(null);
+    };
+  }, [props.label]);
 
-  labelClicked() {
-    const currentLabel = this.state.label;
-    const currentLabelIndex = this.props.labels.indexOf(this.state.label);
+  function labelClicked() {
+    const currentLabelIndex = props.labels.indexOf(label);
     let nextLabelIndex;
 
-    if (currentLabelIndex != 0 && !this.state.lastClickedTimeoutId) {
+    if (currentLabelIndex !== 0 && !lastClickedTimeoutId) {
       nextLabelIndex = 0;
     } else {
-      nextLabelIndex = (currentLabelIndex + 1) % this.props.labels.length;
+      nextLabelIndex = (currentLabelIndex + 1) % props.labels.length;
     }
-    const nextLabel = this.props.labels[nextLabelIndex];
+    const nextLabel = props.labels[nextLabelIndex];
 
-    clearTimeout(this.state.lastClickedTimeoutId);
-    const timeoutId = setTimeout(this.labelClicked2SecondsAgo, 2000);
-
-    this.setState({ label: nextLabel, lastClickedTimeoutId: timeoutId });
+    clearTimeout(lastClickedTimeoutId);
+    const timeoutId = setTimeout(labelClicked2SecondsAgo, 2000);
+    updateLabel(nextLabel);
+    updateLastClickedTimeoutId(timeoutId);
   }
 
-  labelClicked2SecondsAgo() {
-    this.setState({ lastClickedTimeoutId: null });
-    if (this.props.onChange) {
-      this.props.onChange(this.state.label);
+  function labelClicked2SecondsAgo() {
+    updateLastClickedTimeoutId(null);
+    if (props.onChange) {
+      props.onChange(label);
     }
   }
 
-  render() {
-    return (
-      <Button bsSize="large" bsStyle="link" onClick={this.labelClicked}>
-        <Icon name={this.state.label} />
-      </Button>
-    );
-  }
+  return (
+    <Button bsSize="large" bsStyle="link" onClick={labelClicked}>
+      <Icon name={label} />
+    </Button>
+  );
 }
 
 Star.defaultProps = {
